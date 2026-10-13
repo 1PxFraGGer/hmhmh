@@ -1,5 +1,5 @@
 // Paste the ID from the Google Sheets URL between /d/ and /edit.
-const SPREADSHEET_ID = 'PASTE_YOUR_SPREADSHEET_ID';
+const SPREADSHEET_ID = 'https://docs.google.com/spreadsheets/d/1skY8W2F4U__PPXzXQso3JNPh9BodQtY_E-Vu0OSxk9g/edit?gid=1101629996#gid=1101629996';
 
 function doGet(e) {
   const callback = e && e.parameter && e.parameter.callback;
