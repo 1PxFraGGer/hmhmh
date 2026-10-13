@@ -1,5 +1,5 @@
 // Paste the ID from the Google Sheets URL between /d/ and /edit.
-const SPREADSHEET_ID = 'https://docs.google.com/spreadsheets/d/1skY8W2F4U__PPXzXQso3JNPh9BodQtY_E-Vu0OSxk9g/edit?gid=1101629996#gid=1101629996';
+const SPREADSHEET_ID = 'PASTE_YOUR_SPREADSHEET_ID';
 
 function doGet(e) {
   const callback = e && e.parameter && e.parameter.callback;
@@ -15,7 +15,9 @@ function doGet(e) {
 }
 
 function getExamData() {
-  const book = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const match = SPREADSHEET_ID.match(/\/d\/([^/]+)/);
+  const spreadsheetId = match ? match[1] : SPREADSHEET_ID;
+  const book = SpreadsheetApp.openById(spreadsheetId);
   const exams = book.getSheets().map(sheet => {
     const data = sheet.getDataRange().getDisplayValues();
     const headers = data[0] || [];
