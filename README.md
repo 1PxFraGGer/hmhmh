@@ -1,24 +1,24 @@
 # Exam content hub
 
-This draft uses all 149 exam tabs from your updated workbook. Choose an exam in the dropdown, then choose a page button on the left to see its metadata. Blank spreadsheet cells display “No entry yet”. The local draft contains a workbook snapshot; it is not connected to Google Sheets until deployed below.
+A static Vercel frontend for browsing exam tabs, page names, and metadata from Google Sheets. The repository root contains `index.html` and `data.json`, so the site can deploy from the default Vercel root directory. The snapshot contains 149 exams; live updates come from the Google Apps Script endpoint.
 
-## Connect your Google Sheet and deploy
+## Connect Google Sheets once
 
-1. Upload the updated workbook to Google Drive and open/save it as a Google Sheet, or use your existing Google Sheet with the same tabs.
-2. In Google Sheets, open **Extensions → Apps Script**.
-3. Replace the script editor's Code.gs with the supplied Code.gs. Set `SPREADSHEET_ID` to the part of your Google Sheet URL between `/d/` and `/edit`.
-4. Add an HTML file named **Index** and paste the complete supplied Index.html into it.
-5. Choose **Deploy → New deployment → Web app**. Execute as yourself. Choose the audience that should be able to read this exam content; everyone with access to the deployed app can read the returned sheet data. Authorize the spreadsheet read permission and open the returned `/exec` URL.
-6. Keep editing the Google Sheet. Content changes need no website redeployment. Adding/removing tabs and page rows updates the dropdown and sidebar automatically. Frontend/script changes require an updated deployment.
+1. Open the target Google Sheet and select **Extensions → Apps Script**.
+2. Replace the script editor's `Code.gs` with [`apps-script/Code.gs`](apps-script/Code.gs). Set `SPREADSHEET_ID` to the ID between `/d/` and `/edit` in the Sheet URL.
+3. Select **Deploy → New deployment → Web app**, execute as yourself, and choose who can read the exam data. Authorize the read access.
+4. Copy the deployment URL ending in `/exec`. In `index.html`, replace `PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL` in `API_URL` with that URL.
+5. Commit/push the updated `index.html` to `main`. Vercel will redeploy when the repository is connected to the Vercel project.
 
-The app checks the sheet every 60 seconds while visible, when returning to the tab, and when Refresh is clicked. It displays the last successful data if a refresh fails and shows a sync error. The refresh time means “last checked,” not “last edited.” No recurring automation is required. Request frequency scales with active visitors; a high-traffic public deployment should use a backend cache/API rather than one Apps Script request per minute per visitor.
+The site checks Google Sheets every 60 seconds while visible and when the visitor returns to the page. Changes to spreadsheet tabs, page rows, and metadata do not require a website deployment. Changes to the Apps Script code require a new Apps Script deployment version. Keep the spreadsheet ID out of the public frontend. The Apps Script endpoint only reads and returns sheet content. Anyone allowed to visit the deployed website can see the data returned by Apps Script.
 
-## Spreadsheet format
+## Sheet layout
 
-Row 1: `Page Name`, `Meta Title`, `Meta Description`, `Meta Keywords`, `Structure Data` in columns A–E. Rows 2 onward: one page per row. G1 optionally holds a full exam name when the tab name is shortened. Field values, including structured data, are rendered as plain text. Empty and renamed tabs are reflected on the next successful refresh. Keep page names unique within each tab.
+Each exam is a sheet tab. Put `Page Name`, `Meta Title`, `Meta Description`, `Meta Keywords`, and `Structure Data` in columns A–E of row 1. Add one page per row starting in row 2. Optionally put the full exam display name in G1 when a tab name is shortened. Keep page names unique within each tab.
 
-## Local preview
+`data.json` is a snapshot used while live sync is unavailable. To refresh the snapshot, update the JSON from the current workbook or Google Sheets data and push the new file. Live connected views always use the latest successful Apps Script response.
 
-Open Index.html in a browser for the snapshot preview, or serve this directory with `python -m http.server 8765` and open `http://localhost:8765/Index.html`.
+## Vercel
 
-Google documentation: https://developers.google.com/apps-script/guides/web and https://developers.google.com/apps-script/guides/html/communication
+Connect `1PxFraGGer/hmhmh` to Vercel and set the project root directory to `.` (repository root). No build command is needed; serve the static files as-is. A push to `main` triggers production deployment when the Git integration is enabled.
+
