@@ -9,7 +9,7 @@
 <div class="layout"><aside class="box"><div class="navhead">PAGES <span id="count"></span></div><nav id="pages" class="nav" aria-label="Pages"></nav></aside><section class="box detail"><div id="crumb" class="crumb"></div><div class="head"><div><h2 id="title"></h2><div class="sub">Page content from Google Sheets</div></div><button id="refresh" class="refresh">↻ Refresh</button></div><div id="fields" class="fields"></div><div class="foot">Updates appear automatically while the page is open.</div></section></div></main>
 <script>
 // Deploy the supplied Apps Script and paste its /exec URL below.
-const API_URL='PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL';
+const API_URL='https://script.google.com/macros/s/AKfycbzQ01mEjC4-6GzfmNOHuyyIo9OrZTqr10iPdo2AI4YpAIwBRnW3WNlQ6hRHQcBhIKSzIg/exec';
 let data={exams:[]},examId='',pageName='',busy=false;
 const $=id=>document.getElementById(id);
 function filtered(){const q=$('search').value.toLowerCase();return data.exams.filter(e=>e.name.toLowerCase().includes(q)||e.tab.toLowerCase().includes(q));}
